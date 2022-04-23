@@ -27,6 +27,12 @@ const MainNavigation = () => {
           )}
           {isloggedIn && (
             <li>
+              <Link to="/stockdata">StockData</Link>
+            </li>
+          )}
+
+          {isloggedIn && (
+            <li>
               <Link to="/profile">Profile</Link>
             </li>
           )}
@@ -34,6 +40,12 @@ const MainNavigation = () => {
           {isloggedIn && (
             <li>
               <button onClick={logoutHandler}>Logout</button>
+            </li>
+          )}
+
+          {isloggedIn && (
+            <li>
+              <p>User : {ctx.username}</p>
             </li>
           )}
         </ul>

@@ -49,6 +49,10 @@
   color: #c291e2;
 }
 
+p {
+  color: #c291e2;
+}
+
 .header button:hover {
   background-color: #c291e2;
   color: #38015c;

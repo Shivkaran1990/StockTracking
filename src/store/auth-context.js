@@ -6,6 +6,7 @@ const AuthContext = React.createContext({
   isLoggedIn: false,
   login: (token) => {},
   logout: () => {},
+  username: "",
 });
 
 const calculateRemainingTime = (expTime) => {
@@ -16,28 +17,34 @@ const calculateRemainingTime = (expTime) => {
 };
 
 const retriveStoredToken = () => {
+  const username = localStorage.getItem("username");
   const storedToken = localStorage.getItem("token");
   const expiresInTime = localStorage.getItem("tokenExpiresIn");
   const remainingTime = calculateRemainingTime(expiresInTime);
   if (remainingTime <= 3600) {
     localStorage.removeItem("token");
     localStorage.removeItem("tokenExpiresIn");
+    localStorage.removeItem("username");
     return null;
   }
   return {
     token: storedToken,
     duration: remainingTime,
+    username: username,
   };
 };
 
 export const AuthContextProvider = (props) => {
   const tokenData = retriveStoredToken();
   let initalToken;
+  let initalUsername;
   if (tokenData) {
     initalToken = tokenData.token;
+    initalUsername = tokenData.username;
   }
 
   const [token, setToken] = useState(initalToken);
+  const [username, setUsername] = useState(initalUsername);
 
   const userIsLoggedIn = !!token;
 
@@ -45,15 +52,18 @@ export const AuthContextProvider = (props) => {
     setToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("tokenExpiresIn");
+    localStorage.removeItem("username");
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
   }, []);
 
-  const loginHandler = (token, expTime) => {
+  const loginHandler = (token, username, expTime) => {
     localStorage.setItem("token", token);
     localStorage.setItem("tokenExpiresIn", expTime);
+    localStorage.setItem("username", username);
     setToken(token);
+    setUsername(username);
     const remTime = calculateRemainingTime(expTime);
     logoutTimer = setTimeout(logoutHandler, remTime);
   };
@@ -63,6 +73,7 @@ export const AuthContextProvider = (props) => {
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    username: username,
   };
 
   useEffect(() => {

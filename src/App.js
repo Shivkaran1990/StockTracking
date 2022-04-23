@@ -6,6 +6,7 @@ import UserProfile from "./components/Profile/UserProfile";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import AuthContext from "./store/auth-context";
+import StockData from "./components/StockData/StockData";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -18,6 +19,11 @@ function App() {
         {!ctx.isLoggedIn && (
           <Route path="/auth">
             <AuthPage />
+          </Route>
+        )}
+        {ctx.isLoggedIn && (
+          <Route path="/stockdata">
+            <StockData />
           </Route>
         )}
         {ctx.isLoggedIn && (

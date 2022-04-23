@@ -57,9 +57,10 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        //console.log(data);
+        console.log(data);
         const expTime = new Date(new Date().getTime() + +data.expiresIn * 1000);
-        authCtx.login(data.idToken, expTime);
+        const emailsplit = data.email.split("@");
+        authCtx.login(data.idToken, emailsplit[0], expTime);
         history.replace("/");
       })
       .catch((err) => {
